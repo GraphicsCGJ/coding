@@ -5,10 +5,34 @@
 
 using namespace std;
 
+typedef struct tmp_s tmp_t;
+typedef struct tmp_s {
+    int r[4];
+    int c[4];
+    int value;
+};
+
+vector<tmp_t> memoiz;
+
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
 
 int maxVal;
+
+bool check_tmp_v(vector<pair<int, int>>& tet) {
+    for (int i = 0; i < memoiz.size(); i++) {
+        bool flag = true;
+        for (int j = 0; j < 4; j++) {
+            if (memoiz[i].r[j] != tet[j].first || memoiz[i].c[j] != tet[j].second) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag == true)
+            return true;
+    }
+    return false;
+}
 
 bool check_tet( // aa is not in tet
     vector<pair<int, int>>& tet,
@@ -46,30 +70,43 @@ void backtracking(
 
         if (tet.size() == 4) {
             /* calc */
-            int sum = 0;
-            for (int i = 0; i < 4; i++) {
-                sum += v[tet[i].first][tet[i].second];
-                // cout << tet[i].first << ":" << tet[i].second << " ";
+            if (check_tmp_v(tet) == false) {
+                int sum = 0;
+                tmp_t tmptmp;
+                for (int i = 0; i < 4; i++) {
+                    sum += v[tet[i].first][tet[i].second];
+                    tmptmp.r[i] = tet[i].first;
+                    tmptmp.c[i] = tet[i].second;
+                }
+                tmptmp.value = sum;
+                memoiz.push_back(tmptmp);
+
+                if (sum > maxVal)
+                    maxVal = sum;
             }
-            if (sum > maxVal)
-                maxVal = sum;
 
             tet.pop_back();
         }
         else {
             pair<int, int> tet_check(-1, -1);
             s.push(tet_check);
+
+
             for (int i = 0; i < 4; i++) {
-                int li2 = li + dx[i];
-                int lj2 = lj + dy[i];
-                pair<int, int> lp;
-                lp.first = li2;
-                lp.second = lj2;
+                for (int j = 0; j < tet.size(); j++) {
+                    int li = tet[j].first;
+                    int lj = tet[j].first;
+                    int li2 = li + dx[i];
+                    int lj2 = lj + dy[i];
+                    pair<int, int> lp;
+                    lp.first = li2;
+                    lp.second = lj2;
 
-                if (li2 < 0 || li2 >= n || lj2 < 0 || lj2 >= m || !check_tet(tet, visited, lp))
-                    continue;
+                    if (li2 < 0 || li2 >= n || lj2 < 0 || lj2 >= m || !check_tet(tet, visited, lp))
+                        continue;
 
-                s.push(lp);
+                    s.push(lp);
+                }
             }
         }
     }
@@ -99,6 +136,13 @@ int main(void) {
             /* back tracking */
             backtracking(v, visited, n, m, i, j);
         }
+    }
+
+    for (int i = 0; i < memoiz.size(); i++) {
+        for (int j = 0; j < 4; j++) {
+            cout << "[" << memoiz[i].r[j] << "," << memoiz[i].c[j] << "]";
+        }
+        cout << " " << memoiz[i].value << endl;
     }
 
     cout << maxVal << endl;
