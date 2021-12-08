@@ -21,9 +21,18 @@
         * 백트래킹으로 풀 수 있나? 시간 제한 고려하면 struct 미리 정의해서 미는게 나을 것 같다.
         * set 의 comparator 관련 내용 들어가있음.
         * n * m의 상수시간 해결이 훨씬 쉬운 이유.
+        * visited를 쓰는 케이스와, 예외처리에 대해서 brute force하게 해결하는 방법 생각해내기.
 
 * cpp comparator 관련 내용 나중에 정리해보자.
     * https://stackoverflow.com/questions/2620862/using-custom-stdset-comparator
+
+* vector reserve!
+    * 미리 공간 할당 받아서 사용.
+        * backtracking 시, vector로 push pop한다면, 공간을 애초에 하나를 받아서 사용해라. ( max size 안다면 )
+        * 반복해서 사용할 경우 전역에다 vector 선언하는게 낫다.
+            * reserve 없이 사용하면 새로운 메모리 만나게 될 시, vector 메모리 전체 copy가 일어난다. 만약 이게 반복된다면? 계속해서 push마다 full copy가 발생.
+    * 따라서 코테에선 전역변수를 최대한 활용해야 하고, 메모리 할당을 받아놓을 수 있으면 받아놓고 수행하는게 훨씬 빠르다.
+        14500 case에선 10배이상 차이남 ( 시간 초과 2초에 걸리기 때문 )
 
 * 10971 TSP
     * 내코드 좀더 다듬으면서 백트래킹 확실하게 다져놓자.
