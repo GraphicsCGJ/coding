@@ -24,3 +24,6 @@
 
 * cpp comparator 관련 내용 나중에 정리해보자.
     * https://stackoverflow.com/questions/2620862/using-custom-stdset-comparator
+
+* 10971 TSP
+    * 내코드 좀더 다듬으면서 백트래킹 확실하게 다져놓자.
