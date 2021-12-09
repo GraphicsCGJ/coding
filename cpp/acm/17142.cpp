@@ -30,47 +30,47 @@ class tmp_c {
 
 int propagation() {
 
-    vector<tmp_c> v;
-    bool flag = false;
+    vector<tmp_c> v, v2;
     v.reserve(MAX_VAL * MAX_VAL);
-
-    do {
-        flag = false;
-        v.clear();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (map2[i][j] > 0) {
-                    tmp_c tmp(i, j, map2[i][j]);
-                    v.push_back(tmp);
-                }
+    v2.reserve(MAX_VAL * MAX_VAL);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (map2[i][j] > 0) {
+                tmp_c tmp(i, j, map2[i][j]);
+                v.push_back(tmp);
             }
         }
+    }
+    int max_val = 1;
 
+    while (!v.empty()) {
+        v2.clear();
         for (auto& vi : v) {
             for (int i = 0; i < 4; i++) {
                 int r2 = vi.r + dx[i];
                 int c2 = vi.c + dy[i];
 
-                if (r2 < 0 || r2 >= n || c2 < 0 || c2 >= n || map2[r2][c2] != 0)
+                if (r2 < 0 || r2 >= n || c2 < 0 || c2 >= n || (map2[r2][c2] > 0 || map[r2][c2] == -1))
                     continue;
 
+                tmp_c tmp(r2, c2, map2[r2][c2]);
+                v2.push_back(tmp);
+
+
                 map2[r2][c2] = map2[vi.r][vi.c] + 1;
-                flag = true;
+                if (tmp.value == -2) continue;
+                if (map2[r2][c2] > max_val)
+                    max_val = map2[r2][c2];
             }
         }
+        v = v2;
+    }
 
-    } while(flag);
 
-    int max_val = -2;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (map2[i][j] == 0)
                 return -1;
-
-            if (map2[i][j] != -1) {
-                if (max_val < map2[i][j])
-                    max_val = map2[i][j];
-            }
         }
     }
 
@@ -90,7 +90,7 @@ int main(void) {
             if (map[i][j] == 2) {
                 tmp_c tmp(i, j, map[i][j]);
                 v.push_back(tmp);
-                map[i][j] = -1;
+                map[i][j] = -2;
             } else if(map[i][j] == 1)
                 map[i][j] = -1;
         }
