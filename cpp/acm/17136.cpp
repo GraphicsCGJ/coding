@@ -8,6 +8,24 @@ int map[MAX_VAL][MAX_VAL];
 int cnt[MAX_VAL];
 int result;
 
+bool check(int r, int c, int n) {
+    if (r + n >= 10 || c + n >= 10 || n <= 0 || cnt[n - 1] <= 0)
+        return false;
+
+    if (n == 1) {
+
+    }
+
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (map[r + i][c + j] == 0) return false;
+        }
+    }
+
+    return true;
+}
+
 void flip(int r, int c, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -16,66 +34,85 @@ void flip(int r, int c, int n) {
     }
 }
 
-void bruteforce(int r, int c, int n, int cnt2) {
-    cout << "r: " << r << " c: " << c << " n: " << n << endl;
-    if (n <= 0) return;
-
-    if (cnt[n] <= 0) {
-        bruteforce(0, 0, n - 1, cnt2);
+void print() {
+    cout << endl;
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            cout << map[i][j];
+        }
+        cout << endl;
     }
+    cout << endl;
+}
 
-    if (r + n < MAX_VAL && c + n < MAX_VAL) {
+bool findNext (int& r, int& c, int& n) {
+    while (r < 10 && c < 10 && n > 0 && cnt[n - 1] > 0) {
+        // check
         bool flag = true;
-        int i, j;
+        flag = check(r, c, n);
 
-        for (i = 0; i < n; i++) {
-            for (j = 0; j < n; j++) {
-                if (map[i][j] == 0) {
-                    flag = false;
-                    break;
-                }
-            }
-        }
-
-        if (!flag) {
-            bruteforce(r, c + 1, n, cnt2);
-        }
+        // if success
+        if (flag)
+            return true;
         else {
-            flip(r, c, n);
-            cnt[n] -= 1;
-            /* check if all map is colored */
-            bool flag = true;
-            for (i = 0; i < n; i++) {
-                for (j = 0; j < n; j++) {
-                    if (map[i][j] == 1) {
-                        flag = false;
-                        break;
-                    }
+            c++;
+            if (c >= 10) {
+                r++; c = 0;
+                if (r >= 10) {
+                    n--;
+                    r = 0; c = 0;
+                    if (n <= 0)
+                        return false;
                 }
             }
-
-            if (flag) // all map checked.
-                result = (result < 0 ? cnt2 : (result > cnt2 ? cnt2 : result));
-            else {
-                bruteforce(i, j, n, cnt2 + 1);
-            }
-
-            flip(r, c, n);
-            cnt[n] += 1;
-            bruteforce(i, j + 1, n, cnt2);
+            continue;
         }
     }
-    else {
-        if (r + n >= MAX_VAL) {
-            bruteforce(0, 0, n - 1, cnt2);
-        }
-        if (c + n >= MAX_VAL)
-            bruteforce(r + 1, 0, n, cnt2);
+
+    return false;
+}
+
+void bruteforce(int r, int c, int n, int& cnt2) {
+
+    while(!findNext(r, c, n)) {
+        // cout << "loop" << endl;
+        if (check(r, c, n) == false) return;
     }
+
+
+
+    // cout << r << ", " << c << endl;
+    // print();
+
+    /* do */
+    flip(r, c, n);
+    cnt[n - 1] --;
+    cnt2++;
+    /* check if all map is colored */
+    bool flag = true;
+    for (int i = 0; i < 10 && flag; i++)
+        for (int j = 0; j < 10 && flag; j++)
+            flag = (map[i][j] == 1) ? false : flag;
+
+    if (flag) {// all map checked.
+        result = (result < 0 ? cnt2 : (result > cnt2 ? cnt2 : result));
+        // for (int i =0; i < 5;i++) {
+        //     cout << i << " "  << cnt[i] <<endl;
+        // }
+    }
+    else
+        bruteforce(r, c + 1, n, cnt2);
+    flip(r, c, n);
+    cnt[n - 1] ++;
+    cnt2--;
+
+    /* or not */
+    bruteforce(r, c + 1, n, cnt2);
 }
 
 int main(void) {
     result = -1;
+    int local_result = 0;
 
     for (int i = 0; i < MAX_VAL; i++) {
         for (int j = 0; j < MAX_VAL; j++) {
@@ -86,10 +123,25 @@ int main(void) {
     for (int i = 0; i < MAX_VAL; i++) {
         cnt[i] = 5;
     }
+    bool flag = true;
+    for (int i = 0; i < 10 && flag; i++)
+        for (int j = 0; j < 10 && flag; j++)
+            flag = (map[i][j] == 1) ? false : flag;
 
-    bruteforce(0, 0, 5, 0);
+    if (flag) {
+        cout << 0 << endl;
+        return 0;
+    }
+
+
+
+    bruteforce(0, 0, 5, local_result);
 
     cout << result << endl;
+    for (int i =0; i < 5;i++) {
+        cout << i << " "  << cnt[i] <<endl;
+    }
+    cout << endl;
 
     return 0;
 }
