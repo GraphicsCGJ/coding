@@ -1,38 +1,94 @@
 #include <iostream>
-#include<vector>
+#include <cmath>
 
 using namespace std;
 
-int used;
+#define MAX_VALUE 1000001
+typedef long long ll;
 
-void get_val(int *cur_val, int& used) {
+ll arr[MAX_VALUE];
 
+int calcDigit(ll curr) {
+    int n = 0;
+    while (curr > 0) {
+        n++;
+        curr /= 10;
+    }
+
+    return n;
+}
+
+bool check(ll curr) {
+    int predigit = -1;
+
+    while (curr > 0) {
+        int curdigit = curr % 10;
+        if (curdigit <= predigit) return false;
+
+        predigit = curdigit;
+        curr /= 10;
+    }
+
+    return true;
+}
+
+/* alread added */
+void nextVal(ll &curr) {
+    int digit = calcDigit(curr);
+    int tmparr[20];
+
+    /* store current val*/
+    ll curr_tmp = curr;
+    int idx = 0;
+    while (curr_tmp > 0) {
+        tmparr[idx++] = curr_tmp % 10;
+        curr_tmp /= 10;
+    }
+
+    /* calc */
+    /* step 1. */
+
+    for (int i = 0; i < digit - 1; i++) {
+        if (tmparr[i] >= tmparr[i+1]) {
+            tmparr[i+1] += 1;
+            tmparr[i] = i;
+        }
+    }
+    if (tmparr[digit - 1] == 10) {
+        tmparr[digit] = digit;
+        tmparr[digit - 1] = digit -1;
+        digit++;
+    }
+
+    /* restore value*/
+    ll new_curr = 0;
+    for (int i = 0; i < digit; i++) {
+        new_curr += ((ll)pow(10, i) * tmparr[i]);
+    }
+    curr = new_curr;
 }
 
 int main(void) {
-    int used_bit = 1;
-    int final_val[10] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    int cur_val[10] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    /* n 번째 */
+    /* 계산을 다 해놓고, 들어온 값을 arr에서 출력만 해주자. */
+    int n;
+    cin >> n;
 
-    while (true) {
-        bool flag = true;
-        for (int i = 0; i < 10; i++) {
-            if (final_val[i] != cur_val[i]) {
-                flag = false;
-                break;
-            }
-        }
-        if (flag == true)
+    ll curr = 0;
+    for (int i = 0; i < MAX_VALUE; i++)
+        arr[i] = -1;
+
+    for (int i = 0; i < MAX_VALUE; i++) {
+        if (curr > 9876543210)
             break;
 
-        /* 1. check cur_val is descending number. */
-        for (int i = 1; i < used_bit; i++) {
-
-        }
-
-        v.push_back()
+        if (check(curr) == false)
+            nextVal(curr);
+        arr[i] = curr;
+        curr++;
     }
 
+    cout << arr[n] << endl;
 
     return 0;
 }
