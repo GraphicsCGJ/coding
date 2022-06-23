@@ -79,8 +79,6 @@ void bruteforce(int r, int c, int n, int& cnt2) {
         if (check(r, c, n) == false) return;
     }
 
-
-
     // cout << r << ", " << c << endl;
     // print();
 
@@ -132,8 +130,6 @@ int main(void) {
         cout << 0 << endl;
         return 0;
     }
-
-
 
     bruteforce(0, 0, 5, local_result);
 
