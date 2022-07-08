@@ -41,7 +41,6 @@ class problem {
 int main(void) {
     /*
         difference 를 구하고
-
     */
     return 0;
 }
