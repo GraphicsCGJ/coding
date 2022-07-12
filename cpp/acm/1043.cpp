@@ -6,69 +6,21 @@ using namespace std;
 
 int n, m;
 int *known;
+int *parent;
 vector<vector<int>> party;
 
-vector<int> getPossibleParty() {
-    vector<int> possibleParty;
-    for (int veci = 0; veci < party.size(); veci++) { // vec = party[i]
-        bool isPossible = true;
-        vector<int> &vec = party[veci];
-        for (int i = 1; i <= n; i++) {
-            if (known[i] == 0) continue;
 
-            if (find(vec.begin(), vec.end(), i) != vec.end()) {
-                isPossible = false;
-                break;
-            }
-        }
-
-        if (isPossible == true)
-            possibleParty.push_back(veci);
-    }
-
-    return possibleParty;
+int findSet(int v) {
+    if (v == parent[v])
+        return v;
+    return parent[v] = findSet(parent[v]);
 }
 
-int calc (int cnt, vector<int> possibleParty) { // greedy
-    /* calc less */
-    int lessValue = 51;
-    int lessIdx = -1;
-    for (int i = 0; i < possibleParty.size(); i++) {
-        vector<int> &party_1 = party[i];
-        int local_lessValue = 0;
-
-        for (int j = 0; j < possibleParty.size(); j++) {
-            vector<int> &party_2 = party[j];
-            bool flag = false;
-
-            if (i == j) continue;
-            for (int value_1 : party_1) {
-                for (int value_2 : party_2) {
-                    if (value_1 == value_2) {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (flag) {
-                    local_lessValue++;
-                    break;
-                }
-            }
-        }
-
-        if (lessValue > local_lessValue && local_lessValue > 0) {
-            lessValue = local_lessValue;
-            lessIdx = i;
-        }
-    }
-
-    if (lessIdx == -1) return cnt;
-
-    for (auto &vi : party[lessIdx]) {
-        known[vi] = 1;
-    }
-
-    return calc(cnt + 1, getPossibleParty());
+void unionSet(int a, int b) {
+    a = findSet(a);
+    b = findSet(b);
+    if (a != b)
+        parent[b] = a;
 }
 
 int main(void) {
@@ -78,13 +30,20 @@ int main(void) {
     cin >> known_cnt;
 
     known = new int[n + 1];
+    parent = new int [n + 1];
 
+    /* init parent */
+    for (int i = 0; i <= n; i++)
+        parent[i] = i;
+
+    /* cin known */
     for (int i = 0; i < known_cnt; i++) {
         int tmp;
         cin >> tmp;
         known[tmp] = 1;
     }
 
+    /* get party lists */
     for (int i = 0; i < m; i++) {
         int tmp;
         cin >> tmp;
@@ -95,14 +54,38 @@ int main(void) {
         party.push_back(vec);
     }
 
-    vector<int> possibleParty = getPossibleParty();
-    for (auto &vi : possibleParty) {
-        cout << vi << " ";
-        for (auto &vii : party[vi])
-            cout << vii << ", ";
-        cout << endl;
+    /* calc parent*/
+    for (int i = 0; i < m; i++) {
+        for (int j = 1; j < party[i].size(); j++) {
+            int a;
+            int b;
+            if (known[findSet(party[i][j])] == 1) {
+                a = party[i][j];
+                b = party[i][j - 1];
+            }
+            else {
+                a = party[i][j - 1];
+                b = party[i][j];
+            }
+
+            unionSet(a, b);
+        }
     }
-    int ret = calc(0, possibleParty);
+
+    int ret = 0;
+    for (int i = 0; i < m; i++) {
+        bool possible = true;
+        for (int j = 0; j < party[i].size(); j++) {
+            int &val = party[i][j];
+            if (known[findSet(val)] == 1) {
+                possible = false;
+                break;
+            }
+        }
+
+        if (possible == true)
+            ret++;
+    }
 
     cout << ret << endl;
 
