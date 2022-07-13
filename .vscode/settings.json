@@ -9,6 +9,8 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "optional": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "new": "cpp",
+        "iostream": "cpp"
     }
 }
