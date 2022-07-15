@@ -46,10 +46,6 @@ int main(void) {
                 maxVal = map[1][i];
         }
 
-        // free(map[0]);
-        // free(map[1]);
-        // free(map);
-
         cout << maxVal << endl;
     }
 
