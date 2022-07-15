@@ -11,6 +11,14 @@
         "optional": "cpp",
         "istream": "cpp",
         "new": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "sstream": "cpp",
+        "hashtable": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp"
     }
 }
