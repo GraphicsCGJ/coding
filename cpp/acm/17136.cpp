@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -7,9 +9,15 @@ int papers[6];
 
 int mincnt;
 
-void calc(int factor, int cnt, int i_in, int j_in) {
-    cout << factor << " " << cnt << " " << i_in << " " << j_in << endl;
+class c1 {
+    public:
+        int used[6];
+        c1() {
+            memset(used, 0x00, sizeof(int) * 6);
+        }
+};
 
+void calc(int factor, int cnt, int i_in, int j_in) {
     /* papers check */
     bool check = true;
     if (factor <= 0) return;
@@ -35,7 +43,7 @@ void calc(int factor, int cnt, int i_in, int j_in) {
 
     /* map check */
     for (int i = i_in; i <= 10 - factor; i++) {
-        for (int j = j_in; j <= 10 - factor; j++) {
+        for (int j = i == i_in ? j_in : 0; j <= 10 - factor; j++) {
             check = true;
             for (int ii = i; ii < i + factor && check; ii++) {
                 for (int jj = j; jj < j + factor && check; jj++) {
@@ -45,6 +53,7 @@ void calc(int factor, int cnt, int i_in, int j_in) {
             }
 
             if (check == true) {
+                cout << " " << i+1 << ":" << j+1 << "> factor: " << factor << "  cnt: " << cnt << endl;
                 /* in */
                 papers[factor] --;
                 for (int ii = i; ii < i + factor && check; ii++) {
@@ -68,25 +77,45 @@ void calc(int factor, int cnt, int i_in, int j_in) {
     calc(factor - 1, cnt, 0, 0);
 }
 
+vector<c1> v1;
+
+void calc_1(int cnt, int idx, c1 val) {
+    int tmp = (idx / 5) + 1;
+
+    if (cnt - tmp >= 0) {
+        val.used[tmp]++;
+        calc_1(cnt - tmp, idx - 1, val);
+        val.used[tmp]--;
+    }
+    calc_1(cnt - 1, idx, val);
+}
+
 int main(void) {
     mincnt = 100;
-
+    int cnt = 0;
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
             cin >> map[i][j];
+            if (map[i][j] == 1) cnt++;
         }
     }
 
-    for (int i = 1; i <= 5; i++) {
-        papers[i] = 5;
-    }
+    c1 c1_1;
 
-    calc(5, 0, 0, 0);
 
-    if (mincnt == 100)
-        cout << -1 << endl;
-    else
-        cout << mincnt << endl;
+
+
+
+    // for (int i = 1; i <= 5; i++) {
+    //     papers[i] = 5;
+    // }
+
+    // calc(5, 0, 0, 0);
+
+    // if (mincnt == 100)
+    //     cout << -1 << endl;
+    // else
+    //     cout << mincnt << endl;
 
     return 0;
 }
