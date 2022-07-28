@@ -1,147 +1,127 @@
 #include <iostream>
+#include <vector>
+#include <cstring>
 
 using namespace std;
 
-#define MAX_VAL 10
+int map[10][10];
+int papers[6];
 
-int map[MAX_VAL][MAX_VAL];
-int cnt[MAX_VAL];
-int result;
+int mincnt;
 
-bool check(int r, int c, int n) {
-    if (r + n >= 10 || c + n >= 10 || n <= 0 || cnt[n - 1] <= 0)
-        return false;
-
-    if (n == 1) {
-
-    }
-
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (map[r + i][c + j] == 0) return false;
+class c1 {
+    public:
+        int used[6];
+        c1() {
+            memset(used, 0x00, sizeof(int) * 6);
         }
+};
+
+vector<c1> v1;
+
+void calc_1(int cnt, int idx, c1 val) {
+    int tmp = (idx / 5) + 1;
+
+    if (cnt - tmp >= 0) {
+        val.used[tmp]++;
+        calc_1(cnt - tmp, idx - 1, val);
+        val.used[tmp]--;
     }
-
-    return true;
-}
-
-void flip(int r, int c, int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            map[r + i][c + j] = 1 - map[r + i][c + j];
-        }
-    }
-}
-
-void print() {
-    cout << endl;
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            cout << map[i][j];
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-bool findNext (int& r, int& c, int& n) {
-    while (r < 10 && c < 10 && n > 0 && cnt[n - 1] > 0) {
-        // check
-        bool flag = true;
-        flag = check(r, c, n);
-
-        // if success
-        if (flag)
-            return true;
-        else {
-            c++;
-            if (c >= 10) {
-                r++; c = 0;
-                if (r >= 10) {
-                    n--;
-                    r = 0; c = 0;
-                    if (n <= 0)
-                        return false;
-                }
-            }
-            continue;
-        }
-    }
-
-    return false;
-}
-
-void bruteforce(int r, int c, int n, int& cnt2) {
-
-    while(!findNext(r, c, n)) {
-        // cout << "loop" << endl;
-        if (check(r, c, n) == false) return;
-    }
-
-
-
-    // cout << r << ", " << c << endl;
-    // print();
-
-    /* do */
-    flip(r, c, n);
-    cnt[n - 1] --;
-    cnt2++;
-    /* check if all map is colored */
-    bool flag = true;
-    for (int i = 0; i < 10 && flag; i++)
-        for (int j = 0; j < 10 && flag; j++)
-            flag = (map[i][j] == 1) ? false : flag;
-
-    if (flag) {// all map checked.
-        result = (result < 0 ? cnt2 : (result > cnt2 ? cnt2 : result));
-        // for (int i =0; i < 5;i++) {
-        //     cout << i << " "  << cnt[i] <<endl;
-        // }
-    }
-    else
-        bruteforce(r, c + 1, n, cnt2);
-    flip(r, c, n);
-    cnt[n - 1] ++;
-    cnt2--;
-
-    /* or not */
-    bruteforce(r, c + 1, n, cnt2);
+    calc_1(cnt - 1, idx - 1, val);
 }
 
 int main(void) {
-    result = -1;
-    int local_result = 0;
-
-    for (int i = 0; i < MAX_VAL; i++) {
-        for (int j = 0; j < MAX_VAL; j++) {
+    mincnt = 100;
+    int cnt = 0;
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
             cin >> map[i][j];
+            if (map[i][j] == 1) cnt++;
         }
     }
 
-    for (int i = 0; i < MAX_VAL; i++) {
-        cnt[i] = 5;
-    }
-    bool flag = true;
-    for (int i = 0; i < 10 && flag; i++)
-        for (int j = 0; j < 10 && flag; j++)
-            flag = (map[i][j] == 1) ? false : flag;
-
-    if (flag) {
-        cout << 0 << endl;
-        return 0;
-    }
-
-
-
-    bruteforce(0, 0, 5, local_result);
-
-    cout << result << endl;
-    for (int i =0; i < 5;i++) {
-        cout << i << " "  << cnt[i] <<endl;
-    }
-    cout << endl;
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// void calc(int factor, int cnt, int i_in, int j_in) {
+//     /* papers check */
+//     bool check = true;
+//     if (factor <= 0) return;
+
+//     for (int i = 0; i < 10 && check == true; i++) {
+//         for (int j = 0; j < 10 && check == true; j++) {
+//             if (map[i][j] != 0)
+//                 check = false;
+//         }
+//     }
+//     if (check == true) {
+//         if (mincnt > cnt) {
+//             mincnt = cnt;
+//             return;
+//         }
+//     }
+
+//     if (papers[factor] == 0) {
+//         factor--;
+//         i_in = 0; j_in = 0;
+//         if (factor <= 0) return;
+//     }
+
+//     /* map check */
+//     for (int i = i_in; i <= 10 - factor; i++) {
+//         for (int j = i == i_in ? j_in : 0; j <= 10 - factor; j++) {
+//             check = true;
+//             for (int ii = i; ii < i + factor && check; ii++) {
+//                 for (int jj = j; jj < j + factor && check; jj++) {
+//                     if (map[ii][jj] == 0)
+//                         check = false;
+//                 }
+//             }
+
+//             if (check == true) {
+//                 cout << " " << i+1 << ":" << j+1 << "> factor: " << factor << "  cnt: " << cnt << endl;
+//                 /* in */
+//                 papers[factor] --;
+//                 for (int ii = i; ii < i + factor && check; ii++) {
+//                     for (int jj = j; jj < j + factor && check; jj++) {
+//                         map[ii][jj] = 0;
+//                     }
+//                 }
+//                 calc(factor, cnt + 1, i, j + 1);
+//                 papers[factor] ++;
+//                 for (int ii = i; ii < i + factor && check; ii++) {
+//                     for (int jj = j; jj < j + factor && check; jj++) {
+//                         map[ii][jj] = 1;
+//                     }
+//                 }
+
+//                 /* not in */
+//                 calc(factor, cnt, i, j + 1);
+//             }
+//         }
+//     }
+//     calc(factor - 1, cnt, 0, 0);
+// }
