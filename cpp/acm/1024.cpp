@@ -8,7 +8,8 @@ int main(void) {
     cin >> N >> L;
 
     for (int i = L; i <= 100; i++) {
-
+        int val = N / L;
+        if ()
     }
 
 
