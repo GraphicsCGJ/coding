@@ -7,11 +7,6 @@ int L;
 int main(void) {
     cin >> N >> L;
 
-<<<<<<< HEAD
-    for (int i = L; i <= 100; i++) {
-        int val = N / L;
-        if ()
-=======
     bool flag = false;
     for (int i = L; i <= 100 && !flag ; i++) {
         int tmp = N - (i * (i - 1) / 2);
@@ -28,7 +23,6 @@ int main(void) {
 
     if (!flag) {
         cout << -1 << endl;
->>>>>>> 9466cdf57a3215fff183f36fe7a8042ab207a806
     }
 
 
