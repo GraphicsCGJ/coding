@@ -1,33 +1,29 @@
 #include <iostream>
-#include <vector>
+#include <map>
 
 using namespace std;
 
 typedef long long ll;
 
+ll N, P, Q;
+map<ll, ll> map_global;
 
-vector<ll> vec;
-
-int N, P, Q;
-
-int find_vec(ll n) {
-    for (int i = 0; i < vec.size(); i++) {
-        if (vec[i] == n)
-            return i;
+ll find_value(ll key) {
+    if (map_global.find(key) != map_global.end()) {
+        return map_global.find(key)->second;
     }
-    return -1;
-}
 
-ll calc(ll n) {
-    int idx = find_vec(n);
-    if (find_vec(n) != -1) {
-        return
-    }
+    ll tmp = find_value(key / P) + find_value(key / Q);
+    map_global.insert(make_pair(key, tmp));
+
+    return tmp;
 }
 
 int main(void) {
     cin >> N >> P >> Q;
 
+    map_global.insert(make_pair(0, 1));
+    cout << find_value(N) << endl;
 
     return 0;
 }
