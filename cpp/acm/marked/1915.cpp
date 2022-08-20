@@ -21,15 +21,6 @@ int main(void) {
         }
     }
 
-
-    // for (int i = 0; i < N; i++) {
-    //     for (int j = 0; j < M; j++) {
-    //         cout << field[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-    // cout << endl;
-
     int maxval = 0;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
@@ -50,22 +41,6 @@ int main(void) {
                     else {
                         area[i][j] = idx;
                     }
-
-
-
-                    // if (area[i - 1][j - 1] != 0) {
-                    //     bool check = true;
-                    //     int ii = 0;
-                    //     for (ii = 0; ii <= area[i - 1][j - 1] && check; ii++) {
-                    //         check = field[i - ii][j] == 1 && field[i][j - ii] == 1;
-                    //     }
-
-                    //     if (check == true) {
-                    //         area[i][j] = ii + 1;
-                    //         if (maxval < area[i][j])
-                    //             maxval = area[i][j];
-                    //     }
-                    // }
                 }
 
                 if (maxval < area[i][j])
@@ -73,18 +48,6 @@ int main(void) {
             }
         }
     }
-
-    // for (int i = 0; i < N; i++) {
-    //     for (int j = 0; j < M; j++) {
-    //         cout << area[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-
     cout << maxval * maxval << endl;
-
-
-
     return 0;
 }
