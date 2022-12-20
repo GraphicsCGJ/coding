@@ -31,6 +31,7 @@ int main(void) {
     for (int i = 0; i < n; i++) {
         cin >> s;
 
+
         int val_1 = 1;
         for (int j = 0; j < s.length(); j++) {
             tmp_c t(s[j], (int)pow(10, s.length() - 1 - j));
