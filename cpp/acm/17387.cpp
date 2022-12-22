@@ -17,8 +17,7 @@ ll ep(ll ox, ll oy, ll ax, ll ay, ll bx, ll by) {
 
 
 int main(void) {
-
-    cin >> x1 >> y1 >> x2 >> y2;
+s
     cin >> x3 >> y3 >> x4 >> y4;
 
     ll a, b;
