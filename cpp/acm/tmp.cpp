@@ -20,13 +20,13 @@ int main() {
     cout << "lower bound of 11 : " << *(s.lower_bound(11)) << endl;
     cout << "upper bound of 11 : " << *(s.upper_bound(11)) << endl;
 
-    // // --- map example
-    // m.insert(make_pair(6, "six")), m.insert(make_pair(5, "five"));
-    // m.emplace(1, "one"), m.emplace(2, "two"), m.emplace(10, "ten");
-    // m[3] = "three", m[4] = "four";
-    // m.erase(4);
-    // for (const auto &i : m) printf("%d: %s, ", i.first, i.second.c_str());puts("");
-    // cout << "lower bound of 4 : " << (*m.lower_bound(4)).second << endl;
+    // --- map example
+    m.insert(make_pair(6, "six")), m.insert(make_pair(5, "five"));
+    m.emplace(1, "one"), m.emplace(2, "two"), m.emplace(10, "ten");
+    m[3] = "three", m[4] = "four";
+    m.erase(4);
+    for (const auto &i : m) printf("%d: %s, ", i.first, i.second.c_str());puts("");
+    cout << "lower bound of 4 : " << (*m.lower_bound(4)).second << endl;
 
     return 0;
 }
