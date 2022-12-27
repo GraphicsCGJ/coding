@@ -11,8 +11,9 @@ vector <string> vec;
 unordered_map<string, int> m2;
 
 int main(void) {
+    cout.tie(NULL);
     cin.tie(NULL);
-    ios_base::sync_with_stdio(false);	//없으면 시간 초과
+    ios_base::sync_with_stdio(false);
 
     cin >> N >> M;
 
