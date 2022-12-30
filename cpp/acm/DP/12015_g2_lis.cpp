@@ -25,7 +25,7 @@ int bsearch(int *arr2, int& size, int& value) {
             return m;
     }
 
-    return
+    return l;
 }
 
 int main(void) {
@@ -45,10 +45,13 @@ int main(void) {
 
     for (int i = 0; i < N; i++) {
         int res = bsearch(arr2, size, arr[i]);
-
+        if (res == size)
+            arr2[size++] = arr[i];
+        else
+            arr2[res] = arr[i];
     }
 
-    cout << maxVal << endl;
+    cout << size << endl;
 
     return 0;
 }
