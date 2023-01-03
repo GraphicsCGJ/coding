@@ -1,21 +1,19 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int N;
+typedef long long ll;
+
+ll N, M, A;
 
 int main(void) {
+    cin.tie(0);
+    ios_base::sync_with_stdio(0);
 
-    cin >> N;
-    int cnt = 0;
-    while(N--) {
-        int a, b, c;
-        cin >> a >> b >> c;
-        if (a + b + c >= 2)
-            cnt++;
-    }
+    cin >> N >> M >> A;
 
-    cout << cnt << '\n';
+    cout << (N / A + (N % A != 0)) * (M / A + (M % A != 0)) << '\n';
 
     return 0;
 }
+
