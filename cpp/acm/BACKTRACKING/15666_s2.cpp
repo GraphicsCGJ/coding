@@ -6,10 +6,10 @@ int N, M;
 
 int arr[8];
 int values[8];
-vector<int[]> rst2;
+vector<vector<int>> rst2;
 int sz1, sz2;
 
-int cmp(int a[], int b[]) {
+int cmp(vector<int> a, int b[]) {
     bool rt = true;
 
     for (int i = 0; i < M; i++) {
@@ -42,7 +42,7 @@ void dfs(int pos) {
         if (bsearch(values))
             return;
 
-        int tmp[8];
+        vector<int> tmp(8, 0);
         rst2.push_back(tmp);
         for (int i = 0; i < sz1; i++) {
             cout << values[i]<< " ";

@@ -34,11 +34,6 @@ int main(void) {
 
     sort(vec1.begin(), vec1.end(), comp);
 
-    // for (auto& c : vec1) {
-    //     cout << c.l << ":" << c.r<< " ";
-    // }
-    // cout << endl;
-
     int begin_time = 0;
     int cnt = 0;
     for (auto& c : vec1) {
