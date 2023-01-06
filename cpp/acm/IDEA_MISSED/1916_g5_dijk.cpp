@@ -55,7 +55,5 @@ int main(void) {
     }
     cout << dst[E] << '\n';
 
-
-
     return 0;
 }
