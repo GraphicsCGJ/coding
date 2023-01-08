@@ -1,47 +1,49 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
 typedef long long ll;
+typedef pair<int, ll> P;
 
-ll N, M, A;
-ll cnt[100001];
-ll dp[100001][2];
-ll input[100001];
-ll tmp;
+#define MX 100000000001LL
 
+int N, M;
+int dst[100001];
+int visited[100001];
+
+vector<vector<P>> edges;
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
 
-    cin >> N;
+    cin >> N >> M;
 
-    for (int i = 0; i < N; i++) {
-        cin >> input[i];
-        cnt[input[i]]++;
+    fill(dst, dst + N, MX);
+
+    for (int i = 0; i < M; i++) {
+        int a, b, w;
+
+        cin >> a >> b >> w;
+        a--; b--;
+        edges[a].push_back(P(b, w));
+        edges[b].push_back(P(a, w));
     }
 
-    sort (input, input + N);
+    int cur = 0;
+    dst[cur] = 0;
+    visited[cur] = true;
 
-    for (int i = 0; i < N; i+=cnt[input[i]]) {
-        int val = input[i];
-        if (i == 0) {
-            dp[val][0] = 0;
-            dp[val][1] = val * cnt[val];
+    while (cur >= 0) {
+        int nxt = -1;
+
+        for (auto b : edges[cur]) {
+            if (dst[b.first] > dst[cur] + b.second)
+                dst[b.first] = b.second;
         }
-        else {
-            int preval = input[i - 1];
-            if (cnt[val - 1] > 0) {
-                dp[val][1] = dp[preval][0] + cnt[val] * val;
-            }
-            else {
-                dp[val][1] = max(dp[preval][1], dp[preval][0]) + cnt[val] * val;
-            }
-            dp[val][0] = max(dp[preval][0], dp[preval][1]);
-        }
+
+        for ()
     }
-
-    cout << max(dp[input[N - 1]][0], dp[input[N-1]][1]) << '\n';
 
     return 0;
 }
