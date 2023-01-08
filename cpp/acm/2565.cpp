@@ -13,8 +13,11 @@ C1 lanes[100];
 int dp[101];
 int N;
 
-bool cmp (C1& a, C1& b) {
-    return a.cnt > b.cnt;
+bool cmpa (C1& a, C1& b) {
+    return a.a < b.a;
+}
+bool cmpb (C1& a, C1& b) {
+    return a.b > b.b;
 }
 
 int main(void) {
@@ -31,15 +34,23 @@ int main(void) {
         c1.a = a; c1.b = b;
     }
 
-    sort(lanes, lanes + N, cmp);
+    sort(lanes, lanes + N, cmpa);
+
+    int maxVal = 0;
 
     for (int i = 0; i < N; i++) {
         dp[i] = 1;
 
-        for (int j = 0; j <= i; j++) {
-            if (lanes[j].b <)
+        for (int j = 0; j < i; j++) {
+            if (lanes[j].b <lanes[i].b) {
+                dp[i] = dp[i] < dp[j] + 1 ? dp[j] + 1 : dp[i];
+            }
         }
+
+        maxVal = maxVal < dp[i] ? dp[i] : maxVal;
     }
+    // cout << maxVal << '\n';
+    cout << N - maxVal << '\n';
 
     return 0;
 }
