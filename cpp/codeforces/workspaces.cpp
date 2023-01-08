@@ -1,47 +1,77 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
 typedef long long ll;
 
-ll N, M, A;
-ll cnt[100001];
-ll dp[100001][2];
-ll input[100001];
-ll tmp;
+int arr[100];
+int len;
+int N;
 
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
-
-    cin >> N;
-
-    for (int i = 0; i < N; i++) {
-        cin >> input[i];
-        cnt[input[i]]++;
+    string s1;
+    cin >> s1;
+    // if (N == 0) {
+    //     arr[len++] = 0;
+    // }
+    // else {
+    //     while (N > 0) {
+    //         arr[len++] = N % 10;
+    //         N /= 10;
+    //     }
+    // }
+    for (auto c : s1) {
+        arr[len++] = c - '0';
     }
+    int val = 0;
+    while (true) {
+        if (val > 1000) break;
 
-    sort (input, input + N);
+        int val2 = val;
+        int arr2[4];
+        int len2 = 0;
 
-    for (int i = 0; i < N; i+=cnt[input[i]]) {
-        int val = input[i];
-        if (i == 0) {
-            dp[val][0] = 0;
-            dp[val][1] = val * cnt[val];
+        if (val2 == 0) {
+            arr2[len2++] = 0;
         }
         else {
-            int preval = input[i - 1];
-            if (cnt[val - 1] > 0) {
-                dp[val][1] = dp[preval][0] + cnt[val] * val;
+            while (val2 > 0) {
+                arr2[len2++] = val2 % 10;
+                val2 /= 10;
             }
-            else {
-                dp[val][1] = max(dp[preval][1], dp[preval][0]) + cnt[val] * val;
-            }
-            dp[val][0] = max(dp[preval][0], dp[preval][1]);
+
         }
+
+        reverse(arr2, arr2 + len2);
+
+        int i = 0, j = 0;
+        while (i < len && j < len2) {
+            if (arr[i] == arr2[j]) {
+                j++;
+            }
+            i++;
+        }
+        if (j == len2) {
+            cout << "YES" << '\n';
+            for (int i2 = 0; i2 < len2; i2++) {
+                cout << arr2[i2];
+            }
+            cout << '\n';
+
+            return 0;
+        }
+
+        val += 8;
     }
 
-    cout << max(dp[input[N - 1]][0], dp[input[N-1]][1]) << '\n';
+    cout << "NO\n";
+
+
 
     return 0;
 }
