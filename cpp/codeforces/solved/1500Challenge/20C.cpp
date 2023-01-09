@@ -66,17 +66,6 @@ int main(void) {
                 pq.push(P2(-dst[b.first], b.first));
             }
         }
-        if (j == len2) {
-            cout << "YES" << '\n';
-            for (int i2 = 0; i2 < len2; i2++) {
-                cout << arr2[i2];
-            }
-            cout << '\n';
-
-            return 0;
-        }
-
-        val += 8;
     }
 
     // string s = "";
