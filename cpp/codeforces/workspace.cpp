@@ -30,6 +30,9 @@ int main(void) {
 
     sort(vec1.begin(), vec1.end());
 
+    /* make segment tree */
+
+    /* */
     ll globalMax = 0;
     for (int i = 0; i < vec1.size(); i++) {
         int reach = vec1[i].first + D;
