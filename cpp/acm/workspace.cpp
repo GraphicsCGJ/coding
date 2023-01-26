@@ -1,129 +1,67 @@
 #include <iostream>
-#include <vector>
-#include <queue>
+#include <algorithm>
+// #include <set>
+#include <map>
 
 using namespace std;
-#define MX 1000003
 
-typedef pair<int, int> P1;
-typedef pair<P1, int> P2;
 int N, M;
-int field[1000][1000];
-bool visited[1000][1000];
 
-int dr[4] = {0, 0, -1, 1};
-int dc[4] = {1, -1, 0, 0};
-
-vector<P1> vec1;
+int aN[50];
 
 int main(void) {
-    cin.tie(0);
-    ios_base::sync_with_stdio(0);
 
-    cin >> N >> M;
+    // multiset<int> s1;
+    map<int, int> m1;
 
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < M; j++) {
-            char c;
-            cin >> c;
-            field[i][j] = c - '0';;
+    cin >> N;
+    for (int i = 0; i < N; i++)
+        cin >> aN[i];
+
+    cin >> M;
+    for (int i = 0; i < M; i++) {
+        int tmp;
+        cin >> tmp;
+        if (m1.find(tmp) != m1.end()) {
+            m1.find(tmp)->second++;
         }
-    }
-    // for (int i = 0; i < N; i++) {
-    //     for (int j = 0; j < M; j++) {
-    //         cout << field[i][j];
-    //     }cout << '\n';
-    // }
-
-    for (int r = 0; r < N; r++) {
-        for (int c = 0; c < M; c++) {
-
-            if (field[r][c] == 0) continue;
-            int cnt = 0;
-            for (int k = 0; k < 4; k++) {
-                int nr = r + dr[k];
-                int nc = c + dc[k];
-                if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
-
-                if (field[nr][nc] == 0) cnt++;
-            }
-
-            if (cnt >= 2)
-                vec1.push_back(P1(r, c));
+        else {
+            m1.emplace(tmp, 1);
         }
     }
 
-    int ans = MX;
-    for (auto& p : vec1) {
-        int& br = p.first;
-        int& bc = p.second;
+    sort(aN, aN + N);
+    if (m1.rbegin()->first > aN[N-1]) {
+        cout << -1 << '\n';
+        return 0;
+    }
 
-        fill(&visited[0][0], &visited[N-1][N], false);
-        queue<P2> q;
-        q.push(P2(P1(0,0), 0));
-
-        visited[0][0] = true;
-        int lans = MX;
-
-        // cout << br << ':' << bc << '\n';
-        field[br][bc] = 0;
-        while (!q.empty()) {
-            P1& pc = q.front().first;
-            int dst = q.front().second;
-            q.pop();
-            dst++;
-            int& cr = pc.first;
-            int& cc = pc.second;
-            // cout << '\t'<< cr << ':' << cc << '\n';
-            if (cr == N-1 && cc == M-1) {
-                lans = min(dst, lans);
-                break;
+    int time = 0;
+    while(!m1.empty()) {
+        for (int i = N-1; i >= 0; i--) {
+            auto p = m1.lower_bound(aN[i]);
+            if (p->first == aN[i]) {
+                p->second--;
+                if (p->second == 0)
+                    m1.erase(p);
             }
-            for (int i = 0; i < 4; i++) {
-                int nr = cr + dr[i];
-                int nc = cc + dc[i];
-                if (nr < 0 || nr >= N || nc < 0 || nc >= M || visited[nr][nc] || field[nr][nc] == 1) continue;
-                visited[nr][nc] = true;
-                q.push(P2(P1(nr, nc), dst));
+            else {
+                if (m1.empty())
+                    break;
+                if (p == m1.begin())
+                    continue;
+                p--;
+
+                p->second--;
+                if (p->second == 0)
+                    m1.erase(p);
             }
         }
-        field[br][bc] = 1;
-        if (lans < ans)
-            ans = lans;
+
+        time++;
     }
 
-    fill(&visited[0][0], &visited[N-1][N], false);
-    queue<P2> q;
-    q.push(P2(P1(0,0), 0));
-
-    visited[0][0] = true;
-    int lans = MX;
-
-    while (!q.empty()) {
-        P1& pc = q.front().first;
-        int dst = q.front().second;
-        q.pop();
-        dst++;
-        int& cr = pc.first;
-        int& cc = pc.second;
-        if (cr == N-1 && cc == M-1) {
-            lans = min(dst, lans);
-            break;
-        }
-        for (int i = 0; i < 4; i++) {
-            int nr = cr + dr[i];
-            int nc = cc + dc[i];
-            if (nr < 0 || nr >= N || nc < 0 || nc >= M || visited[nr][nc] || field[nr][nc] == 1) continue;
-            visited[nr][nc] = true;
-            q.push(P2(P1(nr, nc), dst));
-        }
-    }
-    if (lans < ans)
-        ans = lans;
-
-
-
-    cout << (ans == MX ? -1 : ans) << '\n';
-
+    cout << time << '\n';
     return 0;
 }
+
