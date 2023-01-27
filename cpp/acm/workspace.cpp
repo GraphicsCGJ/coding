@@ -1,67 +1,64 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
-// #include <set>
-#include <map>
 
 using namespace std;
 
-int N, M;
+typedef pair<int,int> P1;
 
-int aN[50];
+int N, sz;
+vector<P1> rooms[100000];
 
-int main(void) {
+P1 arr[100000];
 
-    // multiset<int> s1;
-    map<int, int> m1;
-
-    cin >> N;
-    for (int i = 0; i < N; i++)
-        cin >> aN[i];
-
-    cin >> M;
-    for (int i = 0; i < M; i++) {
-        int tmp;
-        cin >> tmp;
-        if (m1.find(tmp) != m1.end()) {
-            m1.find(tmp)->second++;
-        }
-        else {
-            m1.emplace(tmp, 1);
-        }
-    }
-
-    sort(aN, aN + N);
-    if (m1.rbegin()->first > aN[N-1]) {
-        cout << -1 << '\n';
-        return 0;
-    }
-
-    int time = 0;
-    while(!m1.empty()) {
-        for (int i = N-1; i >= 0; i--) {
-            auto p = m1.lower_bound(aN[i]);
-            if (p->first == aN[i]) {
-                p->second--;
-                if (p->second == 0)
-                    m1.erase(p);
-            }
-            else {
-                if (m1.empty())
-                    break;
-                if (p == m1.begin())
-                    continue;
-                p--;
-
-                p->second--;
-                if (p->second == 0)
-                    m1.erase(p);
-            }
-        }
-
-        time++;
-    }
-
-    cout << time << '\n';
-    return 0;
+bool cmp(P1& a, P1& b) {
+    return a.second == b.second ? a.first < b.first : a.second < b.second;
 }
 
+int main(void) {
+    cin.tie(0);
+    ios_base::sync_with_stdio(0);
+    // sz = -1;
+    cin >> N;
+
+    for (int i = 0; i < N; i++) {
+        int n, s, e;
+        cin >> n >> s >> e; e--;
+        P1 p1(s, e);
+        arr[i] = p1;
+    }
+
+    sort(arr, arr + N, cmp);
+
+    for (int i = 0; i < N; i++) { // lectures
+        P1& p = arr[i];
+        cout << p.first << ':' << p.second ;
+        int room_number = -1;
+        for (int j = 0; j < sz; j++) { // rooms
+            bool flag2 = true;
+            for (auto& room : rooms[j]) { // lectures in room
+                if ((p.first > room.second && p.first > room.second) ||
+                    (p.second < room.first && p.second < room.first)) {
+                    continue;
+                }
+                else {
+                    flag2 = false;
+                    break;
+                }
+            }
+
+            if (flag2) {
+                room_number = j;
+                break;
+            }
+        }
+        if (room_number == -1)
+            room_number = sz++;
+        cout << ' ' << room_number << '\n';
+        rooms[room_number].push_back(p);
+    }
+
+    cout << sz << '\n';
+
+    return 0;
+}
