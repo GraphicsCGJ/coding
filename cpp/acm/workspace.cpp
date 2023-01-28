@@ -1,64 +1,76 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
-typedef pair<int,int> P1;
+class C1 {
+public:
+    int r;
+    int c;
+    int use;
+    C1(int r, int c, int use) {
+        this->r = r;
+        this->c = c;
+        this->use = use;
+    }
+};
 
-int N, sz;
-vector<P1> rooms[100000];
+int N, M;
+int field[1000][1000];
+int dst[1000][1000][2];
 
-P1 arr[100000];
-
-bool cmp(P1& a, P1& b) {
-    return a.second == b.second ? a.first < b.first : a.second < b.second;
-}
+int dr[4] = {0, 0, -1, 1};
+int dc[4] = {1, -1, 0, 0};
 
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
-    // sz = -1;
-    cin >> N;
 
+    cin >> N >> M;
     for (int i = 0; i < N; i++) {
-        int n, s, e;
-        cin >> n >> s >> e; e--;
-        P1 p1(s, e);
-        arr[i] = p1;
+        string s;
+        cin >> s;
+        for (int j = 0; j < M; j++) {
+            field[i][j] = (s[j] - '0');
+        }
     }
 
-    sort(arr, arr + N, cmp);
+    queue<C1> q;
+    q.push(C1(0,0,0));
+    dst[0][0][0] = 1;
+    dst[0][0][1] = 1;
+    bool flg = false;
+    while(!q.empty()) {
+        C1 cur = q.front();
+        q.pop();
 
-    for (int i = 0; i < N; i++) { // lectures
-        P1& p = arr[i];
-        cout << p.first << ':' << p.second ;
-        int room_number = -1;
-        for (int j = 0; j < sz; j++) { // rooms
-            bool flag2 = true;
-            for (auto& room : rooms[j]) { // lectures in room
-                if ((p.first > room.second && p.first > room.second) ||
-                    (p.second < room.first && p.second < room.first)) {
-                    continue;
-                }
-                else {
-                    flag2 = false;
-                    break;
-                }
+        if (cur.r == N-1 && cur.c == M-1) {
+            cout << dst[cur.r][cur.c][cur.use] << '\n';
+            flg = true;
+            break;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            int nxt_r = cur.r + dr[i];
+            int nxt_c = cur.c + dc[i];
+            if (nxt_r >= N || nxt_r < 0 || nxt_c >= M || nxt_c < 0)
+                continue;
+            if (field[nxt_r][nxt_c] == 1 && cur.use == 0 &&
+                    (dst[nxt_r][nxt_c][1] == 0 || dst[nxt_r][nxt_c][1] > dst[cur.r][cur.c][cur.use] + 1)) {
+                dst[nxt_r][nxt_c][1] = dst[cur.r][cur.c][cur.use] + 1;
+                q.push(C1(nxt_r, nxt_c, 1));
             }
 
-            if (flag2) {
-                room_number = j;
-                break;
+            if (field[nxt_r][nxt_c] == 0 &&
+                    (dst[nxt_r][nxt_c][cur.use] == 0 || dst[nxt_r][nxt_c][cur.use] > dst[cur.r][cur.c][cur.use] + 1)) {
+                dst[nxt_r][nxt_c][cur.use] = dst[cur.r][cur.c][cur.use] + 1;
+                q.push(C1(nxt_r, nxt_c, cur.use));
             }
         }
-        if (room_number == -1)
-            room_number = sz++;
-        cout << ' ' << room_number << '\n';
-        rooms[room_number].push_back(p);
     }
 
-    cout << sz << '\n';
-
+    if (!flg) {
+        cout << -1 << '\n';
+    }
     return 0;
 }
