@@ -1,43 +1,47 @@
-#include <iostream>
-#include <algorithm>
-#include <queue>
+#include<iostream>
+#include<string>
+
 using namespace std;
 
-typedef pair<int,int> P1;
+string s;
+int lvl = 0;
+int p = 0;
 
+class C1 {
+public:
+    C1() = default;
+    char op;
+    C1* l;
+    C1* r;
+};
 
-int N;
-P1 arr[100000];
+C1 makeTree() {
+    int curlvl = lvl;
+    C1 c1;
 
-bool cmp (P1& a, P1& b) {
-    return a.second == b.second ? a.first < b.first : a.second < b.second;
+    while (p < s.length()) {
+        char c = s[p];
+
+        if (c == '(') {
+            p++;
+            C1 c2 = makeTree();
+        }
+        else if (c == ')') {
+            return c1;
+        }
+        else if (c ==   )
+
+        p++;
+    }
+
+    return c1;
 }
 
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
 
-    cin >> N;
+    cin >> s;
 
-    for (int i = 0; i < N; i++) cin >> arr[i].first >> arr[i].second;
-
-    sort(arr, arr + N);
-
-    priority_queue<int> pq;
-    pq.push(-arr[0].second);
-
-    int sz = 1;
-    for (int i = 1; i < N; i++) {
-        int e = -pq.top();
-
-        if (e <= arr[i].first)
-            pq.pop();
-        else
-            sz++;
-
-        pq.push(-arr[i].second);
-    }
-
-    cout << sz << '\n';
     return 0;
 }
