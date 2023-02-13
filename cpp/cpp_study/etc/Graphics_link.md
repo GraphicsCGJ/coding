@@ -1,5 +1,0 @@
-[c++개발자 로드맵(영어)](https://salmer.github.io/CppDeveloperRoadmap/)
-[그래픽스 개발자 로드맵(한글)](https://www.wenyanet.com/opensource/ko/6114ded559c375294e068d75.html)
-[장대명 블로그](https://blog.naver.com/PostList.naver?blogId=dmatrix)
-[장대명 vulkan튜토리얼 git - docs다운가능](https://github.com/daemyung/ogl_to_vlk/tree/master)
-[c++/c to asm 온라인 사이트](https://godbolt.org/)
