@@ -1,28 +1,34 @@
 #include<iostream>
-#include<algorithm>
+#include<set>
 
 using namespace std;
 int N;
-int cnt1, cnt2;
+
+int field[20][20];
+
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
 
 
     cin >> N;
-    for (int i = 0; i < N; i++) {
-        int tmp;
-        cin >> tmp;
 
-        cnt2 += (tmp/2);
-        cnt1 += (tmp%2);
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> field[i][j];
+            if (i != 0) field[i][j] += field[i-1][j];
+        }
     }
 
-    // cout << cnt1 << ':' << cnt2 << '\n';
-    if (cnt2 < cnt1 || (cnt2 - cnt1) % 3 != 0)
-        cout << "NO\n";
-    else
-        cout << "YES\n";
+    set<int> ss[20];
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (i == 0) {
+
+            }
+        }
+    }
 
     return 0;
 }
