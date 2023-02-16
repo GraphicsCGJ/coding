@@ -1,31 +1,33 @@
 #include<iostream>
+#include<set>
 
 using namespace std;
 int N;
 
-int arrows[1000001];
+int field[20][20];
 
 int main(void) {
     cin.tie(0);
     ios_base::sync_with_stdio(0);
 
     cin >> N;
-    int result = 0;
-    for (int i = 0; i < N; i++) {
-        int tmp;
-        cin >> tmp;
 
-        if (arrows[tmp] > 0) {
-            arrows[tmp]--;
-            --tmp;
-            arrows[tmp]++;
-        }
-        else {
-            arrows[--tmp]++;
-            result++;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> field[i][j];
+            if (i != 0) field[i][j] += field[i-1][j];
         }
     }
-    cout << result << '\n';
+
+    set<int> ss[20];
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (i == 0) {
+
+            }
+        }
+    }
 
     return 0;
 }
