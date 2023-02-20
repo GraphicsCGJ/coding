@@ -70,7 +70,7 @@ int main(void) {
             cout << 0 << '\n';
         else {
             cout << 1 << '\n';
-            //
+            cout << v3.x << ' ' << v3.y << '\n';
         }
     }
     else if (cross2 == 0) {
@@ -78,7 +78,7 @@ int main(void) {
             cout << 0 << '\n';
         else {
             cout << 1 << '\n';
-
+            cout << v4.x << ' ' << v4.y << '\n';
         }
     }
     else if (cross3 == 0) {
@@ -86,7 +86,7 @@ int main(void) {
             cout << 0 << '\n';
         else {
             cout << 1 << '\n';
-            //
+            cout << v1.x << ' ' << v1.y << '\n';
         }
     }
     else if (cross4 == 0) {
@@ -94,12 +94,65 @@ int main(void) {
             cout << 0 << '\n';
         else {
             cout << 1 << '\n';
-            //
+            cout << v2.x << ' ' << v2.y << '\n';
         }
     }
     else if ((double)cross1 * (double)cross2 < 0 && (double)cross3 * (double)cross4 < 0) {
         cout << 1 << '\n';
+        const static ll NOTDEFINE = 9999999;
+        double x = NOTDEFINE, y = NOTDEFINE;
+        bool useless_1 = false, useless_2 = false;
 
+        if (v1.x == v2.x) {
+            useless_1 = true;
+            x = v1.x;
+        }
+        if (v1.y == v2.y) {
+            useless_1 = true;
+            y = v1.y;
+        }
+        if (v3.x == v4.x) {
+            useless_2 = true;
+            x = v3.x;
+        }
+        if (v3.y == v4.y) {
+            useless_2 = true;
+            y = v3.y;
+        }
+
+        cout.precision(13);
+        if (x != NOTDEFINE && y != NOTDEFINE) {
+            cout << x << ' ' << y << '\n';
+        }
+        else if (x != NOTDEFINE) {
+            if (useless_1) {
+                double tilt = (double)(v3.y - v4.y) / (double)(v3.x - v4.x);
+                y = tilt * (x - v3.x) + v3.y;
+            }
+            else {
+                double tilt = (double)(v1.y - v2.y) / (double)(v1.x - v2.x);
+                y = tilt * (x - (double)v1.x) + (double)v1.y;
+            }
+            cout << x << ' ' << y << '\n';
+        }
+        else if (y != NOTDEFINE) {
+            if (useless_1) {
+                double tilt = (double)(v3.y - v4.y) / (double)(v3.x - v4.x);
+                x = (1.0 / tilt) * (y - (double)v3.y) + (double)v3.x;
+            }
+            else {
+                double tilt = (double)(v1.y - v2.y) / (double)(v1.x - v2.x);
+                x = (1.0 / tilt) * (y - (double)v1.y) + (double)v1.x;
+            }
+            cout << x << ' ' << y << '\n';
+        }
+        else {
+            double tilt1 = (double)(v1.y - v2.y) / (double)(v1.x - v2.x);
+            double tilt2 = (double)(v3.y - v4.y) / (double)(v3.x - v4.x);
+            x = (v1.x * tilt1 - (double)v3.x * tilt2 - (double)v1.y + (double)v3.y) / (tilt1 - tilt2);
+            y = tilt1 * (x - (double)v1.x) + (double)v1.y;
+            cout << x << ' ' << y << '\n';
+        }
     }
     else {
         cout << '0' << '\n';
