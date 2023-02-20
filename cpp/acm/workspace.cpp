@@ -47,9 +47,6 @@ int main(void) {
     ll cross3 = (v4 - v3) * (v1 - v3);
     ll cross4 = (v4 - v3) * (v2 - v3);
 
-    // cout << cross1 << ' ' << cross2 << '\n';
-    // cout << cross3 << ' ' << cross4 << '\n';
-
     if (cross1 == 0 && cross2 == 0) {
         ll d1 = (v3 - v1).dot(v4-v1);
         ll d2 = (v3 - v2).dot(v4-v2);
@@ -68,26 +65,41 @@ int main(void) {
                 cout << 0 << '\n';
         }
     }
-    else if (cross1 ==0 || cross2 == 0) {
-        if (cross1 == 0 && ((v2 - v1).dot(v3 - v1) < 0 || (v1 - v2).dot(v3 - v2) < 0)) {
+    else if (cross1 == 0) {
+        if ((v2 - v1).dot(v3 - v1) < 0 || (v1 - v2).dot(v3 - v2) < 0)
             cout << 0 << '\n';
+        else {
+            cout << 1 << '\n';
+            //
         }
-        else if (cross2 == 0 && ((v2 - v1).dot(v4 - v1) < 0 || (v1 - v2).dot(v4 - v2) < 0)) {
-            cout << 0 << '\n';
-        }
-        else cout << 1 << '\n';
     }
-    else if (cross3 == 0 ||cross4 == 0) {
-        if (cross3 == 0 && ((v4 - v3).dot(v1 - v3) < 0) || (v3 - v4).dot(v1 - v4) < 0) {
+    else if (cross2 == 0) {
+        if ((v2 - v1).dot(v4 - v1) < 0 || (v1 - v2).dot(v4 - v2) < 0)
             cout << 0 << '\n';
+        else {
+            cout << 1 << '\n';
+
         }
-        else if (cross4 == 0 && ((v4 - v3).dot(v2 - v3) < 0 || (v3 - v4).dot(v2 - v4) < 0)) {
+    }
+    else if (cross3 == 0) {
+        if ((v4 - v3).dot(v1 - v3) < 0 || (v3 - v4).dot(v1 - v4)  < 0)
             cout << 0 << '\n';
+        else {
+            cout << 1 << '\n';
+            //
         }
-        else cout << 1 << '\n';
+    }
+    else if (cross4 == 0) {
+        if ((v4 - v3).dot(v2 - v3) < 0 || (v3 - v4).dot(v2 - v4) < 0)
+            cout << 0 << '\n';
+        else {
+            cout << 1 << '\n';
+            //
+        }
     }
     else if ((double)cross1 * (double)cross2 < 0 && (double)cross3 * (double)cross4 < 0) {
         cout << 1 << '\n';
+
     }
     else {
         cout << '0' << '\n';
