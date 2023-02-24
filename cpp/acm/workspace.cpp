@@ -15,8 +15,6 @@ int N;
 //     return parent[x] = find_root(parent[x]);
 // }
 
-
-
 // /* Union Function */
 // void union_root(int x, int y) {
 //     x = find_root(x);
