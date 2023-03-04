@@ -1,36 +1,32 @@
 #include <iostream>
+#include <vector>
+#include <unordered_map>
 #include <algorithm>
 using namespace std;
-using P1 = pair<int,int>;
 
-int N;
-P1 arr[1000];
+int N, M;
 
-bool cmp(P1& a, P1& b) {
-  return a.second > b.second;
-}
+int dp[1001][100001];
 
 int main(void) {
   cin.tie(0);
   ios_base::sync_with_stdio(0);
 
-  cin >> N;
+  cin >> N >> M;
+  vector<P1> v1;
   for(int i = 0;i<N;i++) {
-    cin >> arr[i].first >> arr[i].second;
+    P1 p;
+    cin >> p.first;
+    p.second = -1;
+    v1.push_back(p);
   }
+  for(int i = 0;i<N;i++)
+    cin >> v1[i].second;
 
-  sort(arr, arr + N, cmp);
+  mp.emplace(0,0);
 
-  int cur = arr[0].second;
+  vector<P1> v2;
   for (int i = 0; i < N; i++) {
-    auto& p = arr[i];
-    cur = p.second >= cur ? cur - p.first : p.second - p.first;
+
   }
-
-
-  cout << (cur < 0 ? -1 : cur) << '\n';
-
-
-
-  return 0;
 }
