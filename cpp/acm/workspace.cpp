@@ -6,29 +6,14 @@ using ll=long long;
 
 
 int N;
+int filled[3];
 
+ll arr[5000];
 
-ll field[500][500];
-ll dp[500][500];
-int dr[4] = {-1,1,0,0};
-int dc[4] = {0,0,-1,1};
-ll MX = 0;
-
-ll dfs(int r, int c) {
-  if (dp[r][c] > 0) return dp[r][c];
-
-  dp[r][c] = 1;
-  for (int i = 0; i < 4; i++) {
-    int nr = r + dr[i];
-    int nc = c + dc[i];
-
-    if (nr >= N || nr < 0 || nc >= N || nc < 0 ||
-        field[r][c] <= field[nr][nc])
-      continue;
-    dp[r][c] = max(dp[r][c], dfs(nr,nc) + 1);
-  }
-
-  return dp[r][c];
+inline bool _contain(int* arr, ll tgt) {
+  for (int i = 0; i < 3; i++)
+    if (arr[i] == tgt) return true;
+  return false;
 }
 
 int main(void) {
@@ -37,19 +22,46 @@ int main(void) {
 
   cin >> N;
   for(int i=0;i<N;i++){
-    for(int j=0;j<N;j++){
-      cin>>field[i][j];
-    }
+    cin>>arr[i];
   }
+  sort(arr,arr+N);
+  for(int i=0;i<3;i++)
+    filled[i] = i;
 
-  for(int i=0;i<N;i++){
-    for(int j=0;j<N;j++){
-      ll LMX = dfs(i,j);
-      MX = max(MX,LMX);
+  bool moved = false;
+  do {
+    moved = false;
+
+    int filled2[3];
+    ll sum = 0;
+    for (int i=0; i<3;i++)
+      sum += arr[filled[i]];
+
+    for (int i=0; i<3;i++) {
+      for (int nxt = filled[i]-1; nxt <= filled[i] + 1; nxt+=2) {
+        if (nxt < 0 || nxt >= N || _contain(filled, nxt)) continue;
+
+        ll sum2 = 0;
+        for (int k = 0; k < 3; k++)
+          sum2 += k != i ? arr[filled[k]] : arr[nxt];
+        if (abs(sum2) < abs(sum)) {
+          sum = sum2;
+          for (int k = 0; k < 3; k++)
+            filled2[k] = (i == k ? nxt : filled[k]);
+          moved = true;
+        }
+      }
     }
-  }
 
-  cout << MX << '\n';
+    if (moved) {
+      for (int i=0;i<3;i++)
+        filled[i] = filled2[i];
+    }
+  } while(moved);
+
+  for (int i = 0; i < 3; i++)
+    cout << arr[filled[i]] << ' ';
+  cout << '\n';
 
   return 0;
 }
