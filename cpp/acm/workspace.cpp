@@ -15,22 +15,29 @@ bool cmp(P1& a, P1& b) {
   return a.first < b.first;
 }
 
-bool isPossible(int src, int dst, int cvt) {
-  int lpos = arr[src].first;
-  int rpos = arr[dst].first;
-  if (lpos > rpos) swap(lpos, rpos);
-  if (cvt == 1) {
-    auto& v = mp.find(arr[src].second)->second;
-    auto iter = lower_bound(v.begin(), v.end(), lpos);
-    auto iter_nxt = iter+1;
-    if (iter_nxt != v.end() && *iter_nxt <= rpos) return true;
+bool func(int l, int r, int type) {
+  int lpos = arr[l].first;
+  int rpos = arr[r].first;
+  int l_species = arr[l].second;
+  int r_species = arr[r].second;
+
+  if (l>=r) return false;
+
+  if (type == 1) {
+    auto& v = mp.find(l_species)->second;
+    int idx = lower_bound(v.begin(), v.end(), lpos) - v.begin();
+    if (idx < v.size() - 1) {
+      int nxt = idx+1;
+      if (v[nxt] <= rpos) return true;
+    }
   }
   else {
-    auto& v = mp.find(arr[dst].second)->second;
-    auto iter = lower_bound(v.begin(), v.end(), rpos);
-    if (iter == v.begin()) return false;
-    auto iter_nxt = --iter;
-    if (*iter_nxt >= lpos) return true;
+    auto& v = mp.find(r_species)->second;
+    int idx = lower_bound(v.begin(), v.end(), rpos) - v.begin();
+    if (idx > 0) {
+      int nxt = idx-1;
+      if (v[nxt] >= lpos) return true;
+    }
   }
   return false;
 }
@@ -57,10 +64,17 @@ int main(void) {
   sort(arr, arr+N, cmp);
 
   int l = 0; int r = N-1;
-  while (isPossible(l,r,1)) l++;
-  while (isPossible(l,r,-1)) r--;
-  cout << arr[r].first - arr[l].first << '\n';
+  while (func(l,r,1)) l++;
+  while (func(l,r,-1)) r--;
+  int mx = arr[r].first - arr[l].first;
 
+  l = 0; r = N-1;
+  while (func(l,r,-1)) r--;
+  while (func(l,r,1)) l++;
+
+  if (mx > arr[r].first - arr[l].first) mx = arr[r].first - arr[l].first;
+
+  cout << mx << '\n';
 
   return 0;
 }
