@@ -1,3 +1,4 @@
+// 5926 https://www.acmicpc.net/problem/5926
 #include <iostream>
 #include <queue>
 
@@ -7,7 +8,6 @@ int N;
 priority_queue<int> pq;
 
 int main(void) {
-
   cin.tie(0);
   ios_base::sync_with_stdio(0);
 
