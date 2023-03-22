@@ -1,28 +1,35 @@
 #include <iostream>
-#include <string>
+#include <map>
 #include <algorithm>
 
 using namespace std;
-int dp[101][101][101];
+
+int G,P;
+int root[100001];
+
+int find_root(int i) {
+  if (root[i] == i) {
+    root[i] -= 1;
+    return root[i];
+  }
+  return root[i] = find_root(root[i]);
+}
 
 int main(void) {
   cin.tie(0);
   ios_base::sync_with_stdio(0);
 
-  string a, b, c;
-  cin >> a >> b >> c;
-  for (int i = 1; i <= a.length(); i++) {
-    for (int j = 1; j <= b.length(); j++) {
-      for (int k = 1; k <= c.length(); k++) {
-        dp[i][j][k] = max(max(dp[i-1][j][k], dp[i][j-1][k]), dp[i][j][k-1]);
+  cin >> G >> P;
+  for (int i = 0; i <= G; i++) root[i] = i;
 
-        if (a[i-1] == b[j-1] && a[i-1] == c[k-1])
-          dp[i][j][k] = dp[i][j][k] < dp[i-1][j-1][k-1] + 1 ? dp[i-1][j-1][k-1] + 1 : dp[i][j][k];
-      }
-    }
+  int i;
+  for (i = 0; i < P; i++) {
+    int tmp; cin >> tmp;
+    int rt = find_root(tmp);
+    if (rt == -1) break;
   }
 
-  cout << dp[a.length()][b.length()][c.length()] << '\n';
+  cout << i << '\n';
 
   return 0;
 }
